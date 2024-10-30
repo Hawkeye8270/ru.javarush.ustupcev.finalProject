@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      db:
+        condition: service_started
+      nginx:
+        condition: service_started
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/jira
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - app-network
+
+  db:
+    image: postgres:17.0
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data2/pgdata
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - "81:81"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/nginx.conf
+#      - ./config/nginx.conf:/etc/nginx.conf.d
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
