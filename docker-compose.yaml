@@ -39,12 +39,12 @@ services:
   nginx:
     container_name: nginx
     image: nginx:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - "81:81"
     volumes:
-      - ./config/nginx.conf:/etc/nginx/conf.d/nginx.conf
-#      - ./config/nginx.conf:/etc/nginx.conf.d
+      #      - ./config/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./config/nginx.conf:/etc/nginx.conf.d
     networks:
       - app-network
 
