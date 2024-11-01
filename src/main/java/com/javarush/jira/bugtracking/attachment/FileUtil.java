@@ -6,16 +6,12 @@ import lombok.experimental.UtilityClass;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-
+import java.nio.file.StandardOpenOption;
 
 
 @UtilityClass
@@ -30,26 +26,13 @@ public class FileUtil {
         Path dir = Paths.get(directoryPath);
         Path file = dir.resolve(fileName);
 
-        try (OutputStream outputStream = Files.newOutputStream(file)) {
-                outputStream.write((multipartFile.getBytes()));
-        }
+        try{
+            Files.createDirectories(dir);
+            Files.write(file, multipartFile.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException ex)  {
+                throw new IllegalRequestDataException("Failed to upload file" + multipartFile.getOriginalFilename());
+            }
     }
-
-//    public static void upload(MultipartFile multipartFile, String directoryPath, String fileName) {
-//        if (multipartFile.isEmpty()) {
-//            throw new IllegalRequestDataException("Select a file to upload.");
-//        }
-//
-//        File dir = new File(directoryPath);
-//        if (dir.exists() || dir.mkdirs()) {
-//            File file = new File(directoryPath + fileName);
-//            try (OutputStream outStream = new FileOutputStream(file)) {
-//                outStream.write(multipartFile.getBytes());
-//            } catch (IOException ex) {
-//                throw new IllegalRequestDataException("Failed to upload file" + multipartFile.getOriginalFilename());
-//            }
-//        }
-//    }
 
     public static Resource download(String fileLink) {
         Path path = Paths.get(fileLink);
