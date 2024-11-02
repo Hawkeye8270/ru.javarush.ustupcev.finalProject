@@ -20,7 +20,8 @@ spring:
 
     # validate db by model
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
+#      ddl-auto: validate
 
     properties:
       #  http://docs.jboss.org/hibernate/orm/5.3/userguide/html_single/Hibernate_User_Guide.html#configurations
@@ -34,7 +35,6 @@ spring:
 
   liquibase:
     changeLog: "classpath:db/changelog.sql"
-#    data: "classpath:data4dev/data.sql"
 
   # Jackson Fields Serialization
   jackson:
@@ -83,10 +83,6 @@ spring:
           starttls:
             enable: true
           auth: true
-#    host: smtp.gmail.com
-#    username: jira4jr@gmail.com
-#    password: zdfzsrqvgimldzyj
-#    port: 587
 
   thymeleaf.check-template-location: false
 
@@ -136,7 +132,7 @@ spring:
     url: jdbc:postgresql://localhost:5433/jira-test
 
   liquibase:
-    changeLog: "classpath:db/changelog.sql"
+    changeLog: "classpath:db/changelog-test.sql"
 
   # Jackson Fields Serialization
   jackson:
@@ -185,10 +181,6 @@ spring:
           starttls:
             enable: true
           auth: true
-  #    host: smtp.gmail.com
-  #    username: jira4jr@gmail.com
-  #    password: zdfzsrqvgimldzyj
-  #    port: 587
 
   thymeleaf.check-template-location: false
 

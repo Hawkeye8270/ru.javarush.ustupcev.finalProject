@@ -7,5 +7,5 @@ spring:
     username: jira
     password: JiraRush
 
-#  liquibase:
-#    changeLog: "classpath:db/changelog.sql"
+  liquibase:
+    changeLog: "classpath:db/changelog-test.sql"
